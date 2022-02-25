@@ -1,12 +1,4 @@
-from __future__ import annotations
-
-from typing import TYPE_CHECKING, Any, Iterable
-
-if TYPE_CHECKING:
-    from entity import EntityClasses
-
-
-def get_class_as_str(entity_class: EntityClasses) -> str:
+def get_class_as_str(entity_class):
     if entity_class == entity_class.BaseEntity:
         return "Base Entity"
     elif entity_class == entity_class.Warrior:
@@ -21,5 +13,5 @@ def get_class_as_str(entity_class: EntityClasses) -> str:
         return "Unidentified"
 
 
-def number_key_dict(iterable: Iterable) -> dict[str, Any]:
+def number_key_dict(iterable):
     return {str(n): item for n, item in enumerate(iterable, start=1)}

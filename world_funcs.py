@@ -1,7 +1,7 @@
 from helper_funcs import number_key_dict
 
 
-def travel_to(prev_location: str, locations: list[str]) -> str:
+def travel_to(prev_location, locations):
     if prev_location == "Derelict Shrine":
         locations = locations + ["Mausoleum"]
 

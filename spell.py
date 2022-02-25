@@ -1,11 +1,4 @@
 from enum import Enum, auto
-from typing import Callable
-from mage import Mage
-from entity import Entity
-    
-
-SpellFuncType = Callable[[Mage, Entity | Mage | list[Entity | Mage]], None]
-
 
 class SpellType(Enum):
     Offensive = auto()
@@ -17,7 +10,7 @@ class SpellType(Enum):
 class Spell:
     __slots__ = ("name", "stype", "cost", "power", "desc", "function")
 
-    def __init__(self, name: str, stype: SpellType, cost: int, power: int, desc: str, function: SpellFuncType):
+    def __init__(self, name, stype, cost, power, desc, function):
         self.name = name
         self.stype = stype
         self.cost = cost
@@ -25,6 +18,6 @@ class Spell:
         self.desc = desc
         self.function = function
 
-    def __str__(self) -> str:
+    def __str__(self):
         return f"Name: {self.name}\tMana Cost: {self.cost}\n" \
                f"Power: {self.power}\nDescription:\n{self.desc}\n"

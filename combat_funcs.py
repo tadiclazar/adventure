@@ -8,7 +8,7 @@ from spell_funcs import cast_firebolt, cast_raise_dead, cast_black_miasma
 from helper_funcs import number_key_dict
 
 
-def add_enemies(location: str) -> list[Entity | Mage]:
+def add_enemies(location):
     if location == "Graveyard":
         return [
             Entity("Skeleton", EntityClasses.Warrior, 25, 6, 1, gold=15),
@@ -38,7 +38,7 @@ def add_enemies(location: str) -> list[Entity | Mage]:
         return []
 
 
-def enemy_attack(enemy_party: list[Entity | Mage], player_party: list[Entity | Mage]) -> None:
+def enemy_attack(enemy_party, player_party):
     print("\nThe enemy party begins their attack!\n")
 
     for enemy in enemy_party:
@@ -78,8 +78,7 @@ def enemy_attack(enemy_party: list[Entity | Mage], player_party: list[Entity | M
             player_party.remove(target)
 
 
-def party_member_use_magic(member: Entity | Mage, chosen_spell: Spell,
-                           enemy_party: list[Entity | Mage], player_party: list[Entity | Mage]) -> None:
+def party_member_use_magic(member, chosen_spell, enemy_party, player_party):
     if chosen_spell.stype == SpellType.Offensive:
         enemy_dict = number_key_dict(enemy_party)
         targets = "\n".join(f"\t{i}) {enemy.name}" for i, enemy in enemy_dict.items())
@@ -113,7 +112,7 @@ def party_member_use_magic(member: Entity | Mage, chosen_spell: Spell,
             print("Invalid target!\n")
 
 
-def party_member_attack(member: Entity | Mage, enemy_party: list[Entity | Mage]) -> None:
+def party_member_attack(member, enemy_party):
     enemy_dict = number_key_dict(enemy_party)
     targets = "\n".join(f"\t{i}) {enemy.name}" for i, enemy in enemy_dict.items())
     print(targets)
@@ -131,7 +130,7 @@ def party_member_attack(member: Entity | Mage, enemy_party: list[Entity | Mage])
         print("Invalid target!")
 
 
-def battle_at(location: str, player_party: list[Entity | Mage]) -> int:
+def battle_at(location, player_party):
     enemies = add_enemies(location)
     gold_gained = sum(random.randint(en_gold // 2, en_gold) for enemy in enemies if (en_gold := enemy.gold) > 0)
 

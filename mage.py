@@ -1,24 +1,15 @@
-from __future__ import annotations
-
-from typing import TYPE_CHECKING
 from entity import Entity
 from helper_funcs import get_class_as_str
 
-if TYPE_CHECKING:
-    from entity import EntityClasses
-    from spell import SpellFuncType
-    from spell import Spell
-
 
 class Mage(Entity):
-    def __init__(self, name: str, e_class: EntityClasses, hp: int, mp: int, damage: int,
-                 armor: int, mage_spells: list[SpellFuncType], gold: int = 0):
+    def __init__(self, name, e_class, hp, mp, damage, armor, mage_spells, gold=0):
         super().__init__(name, e_class, hp, damage, armor, gold)
         self.mp = mp
         self.max_mp = mp
         self.mage_spells = mage_spells
 
-    def __str__(self) -> str:
+    def __str__(self):
         the_class = get_class_as_str(self.e_class)
 
         if self.mage_spells:
@@ -32,7 +23,7 @@ class Mage(Entity):
                f"Current Mana: {self.mp}\tMax. Mana: {self.max_mp}\n" \
                f"Known Spells:\n{known_spells}"
 
-    def cast_spell(self, spell: Spell, target: "Entity" | "Mage") -> None:
+    def cast_spell(self, spell, target):
         if self.mp < spell.cost:
             print(f"\n{self.name} doesn't have enough mana to cast {spell.name}!\n")
         else:
@@ -40,14 +31,14 @@ class Mage(Entity):
             self.mp -= spell.cost
             spell.function(self, target, spell.power)
 
-    def learn_spell(self, spell: Spell) -> None:
+    def learn_spell(self, spell):
         if spell in self.mage_spells:
             print(f"{self.name} already knows {spell.name}!\n")
         else:
             print(f"{self.name} memorizes {spell.name} in the spellbook!\n")
             self.mage_spells.append(spell)
 
-    def rejuvenate(self, amount: int) -> None:
+    def rejuvenate(self, amount):
         max_mp = self.max_mp
 
         if self.mp + amount < max_mp:
@@ -57,13 +48,13 @@ class Mage(Entity):
 
 
 class SummonedCreature(Entity):
-    def __init__(self, name: str, e_class: EntityClasses, hp: int, mp: int, damage: int, armor: int, gold: int = 0):
+    def __init__(self, name, e_class, hp, mp, damage, armor, gold=0):
         super().__init__(name, e_class, hp, damage, armor, gold)
         self.mp = mp
         self.max_mp = mp
         self.is_summoned = True
 
-    def unsummon(self, party: list[Mage | "SummonedCreature"]) -> None:
+    def unsummon(self, party):
         self.is_summoned = False
         self.hp = 0
         party.remove(self)

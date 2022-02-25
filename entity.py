@@ -1,12 +1,6 @@
-from __future__ import annotations
-
 import random
 from enum import Enum, auto
-from typing import TYPE_CHECKING
 from helper_funcs import get_class_as_str
-
-if TYPE_CHECKING:
-    from mage import Mage
 
 
 class EntityClasses(Enum):
@@ -19,7 +13,7 @@ class EntityClasses(Enum):
 
 
 class Entity:
-    def __init__(self, name: str, e_class: EntityClasses, hp: int, damage: int, armor: int, gold: int = 0):
+    def __init__(self, name, e_class, hp, damage, armor, gold=0):
         self.name = name
         self.e_class = e_class
         self.hp = hp
@@ -28,19 +22,19 @@ class Entity:
         self.armor = armor
         self.gold = gold
 
-    def __str__(self) -> str:
+    def __str__(self):
         the_class = get_class_as_str(self.e_class)
 
         return f"Name: {self.name}\tClass: {the_class}\n" \
                f"Current HP: {self.hp}\tMax. HP: {self.max_hp}\tDamage: {self.damage}\n" \
                f"Armor Class: {self.armor}\n"
 
-    def is_dead(self) -> bool:
+    def is_dead(self):
         if self.hp <= 0:
             return True
         return False
 
-    def heal(self, amount: int) -> None:
+    def heal(self, amount):
         max_hp = self.max_hp
 
         if self.hp + amount < max_hp:
@@ -48,7 +42,7 @@ class Entity:
         else:
             self.hp = max_hp
 
-    def attack(self, target: "Entity" | Mage) -> None:
+    def attack(self, target):
         dmg = self.damage - target.armor
         if dmg <= 0:
             print(f"The {self.name} does no damage to {target.name}!")

@@ -1,15 +1,9 @@
-from __future__ import annotations
-
 import random
-from typing import TYPE_CHECKING
 from mage import SummonedCreature
 from entity import EntityClasses
 
-if TYPE_CHECKING:
-    from mage import Mage
-    from entity import Entity
 
-def cast_raise_dead(caster: Mage, party: list[Entity | Mage], spell_power: int) -> None:
+def cast_raise_dead(caster, party, spell_power):
     skeleton_hp = spell_power * 2
     skeleton_dmg = spell_power // 2 + 1
     skeleton_armor = spell_power // 3
@@ -19,7 +13,7 @@ def cast_raise_dead(caster: Mage, party: list[Entity | Mage], spell_power: int) 
     party.append(skeleton)
 
 
-def cast_firebolt(caster: Mage, target: Entity | Mage, spell_power: int) -> None:
+def cast_firebolt(caster, target, spell_power):
     if not target:
         print("\nThere is no target!\n")
         return None
@@ -35,7 +29,7 @@ def cast_firebolt(caster: Mage, target: Entity | Mage, spell_power: int) -> None
     target.hp -= spell_damage
 
 
-def cast_healing(caster: Mage, target: Entity | Mage, spell_power: int) -> None:
+def cast_healing(caster, target, spell_power):
     if target.hp == target.max_hp:
         return None
 
@@ -43,7 +37,7 @@ def cast_healing(caster: Mage, target: Entity | Mage, spell_power: int) -> None:
     target.heal(spell_power)
 
 
-def cast_black_miasma(target: Entity | Mage) -> None:
+def cast_black_miasma(target):
     power = 16
     saving_throw = 1 if (target.hp > (target.max_hp // 2 + random.randint(1, target.armor))) else 0
 

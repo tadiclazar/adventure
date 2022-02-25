@@ -8,7 +8,7 @@ from world_funcs import travel_to
 from spell_funcs import cast_firebolt, cast_raise_dead, cast_healing
 
 
-def main() -> None:
+def main():
     print("Welcome to the Adventure Game!\nExplore the world and discover it's secrets!\n")
     print("You are controlling a small party of adventurers: "
           "Warrior named Aidan,\nRogue by the name of Morena and a Mage called Jasper!\n")
