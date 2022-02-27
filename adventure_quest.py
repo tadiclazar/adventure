@@ -1,6 +1,6 @@
 import sys
 
-from entity import Entity, EntityClasses
+from entity import Entity
 from mage import Mage
 from spell import Spell, SpellType
 from combat_funcs import battle_at
@@ -9,6 +9,12 @@ from spell_funcs import cast_firebolt, cast_raise_dead, cast_healing
 
 
 def main():
+    """
+    Main function of the program.
+
+    :return: Nothing.
+    :rtype: None
+    """
     print("Welcome to the Adventure Game!\nExplore the world and discover it's secrets!\n")
     print("You are controlling a small party of adventurers: "
           "Warrior named Aidan,\nRogue by the name of Morena and a Mage called Jasper!\n")
@@ -16,9 +22,9 @@ def main():
     battle_locations = ["Graveyard", "Abandoned Mine", "Derelict Shrine"]
     current_location = "Town Tristram"
 
-    warrior = Entity("Aidan", EntityClasses.Warrior, 35, 9, 3)
-    rogue = Entity("Morena", EntityClasses.Rogue, 30, 8, 1)
-    mage = Mage("Jasper", EntityClasses.Mage, 20, 10, 5, 0, mage_spells=[], gold=0)
+    warrior = Entity("Aidan", 35, 9, 3)
+    rogue = Entity("Morena", 30, 8, 1)
+    mage = Mage("Jasper", 20, 10, 5, 0, mage_spells=[], gold=0)
 
     player_party = [warrior, rogue, mage]
 
@@ -78,7 +84,7 @@ def main():
         elif command in ("i", "i"):
             for pm in player_party:
                 print(pm)
-            print(f"\nThe party has {party_gold} gold coins.")
+            print(f"\nThe party has {party_gold} gold coins.\n")
         else:
             print("Invalid command!\n")
 

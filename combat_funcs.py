@@ -1,6 +1,6 @@
 import random
 
-from entity import Entity, EntityClasses
+from entity import Entity
 from boss_enemy import BossEnemy
 from spell import Spell, SpellType
 from mage import Mage, SummonedCreature
@@ -9,36 +9,54 @@ from helper_funcs import number_key_dict
 
 
 def add_enemies(location):
+    """
+    Return the appropriate enemy list, depending on the current location.
+
+    :param location: Location of the player party.
+    :type location: str
+    :return: A list of enemies.
+    :rtype: list[Entity | Mage | BossEnemy]
+    """
     if location == "Graveyard":
         return [
-            Entity("Skeleton", EntityClasses.Warrior, 25, 6, 1, gold=15),
-            Entity("Skeleton", EntityClasses.Warrior, 25, 6, 1, gold=15),
-            Entity("Skeleton Warrior", EntityClasses.Warrior, 30, 8, 2, gold=25),
+            Entity("Skeleton", 25, 6, 1, gold=15),
+            Entity("Skeleton", 25, 6, 1, gold=15),
+            Entity("Skeleton Warrior", 30, 8, 2, gold=25),
         ]
     elif location == "Abandoned Mine":
         return [
-            Entity("Gnome", EntityClasses.Warrior, 20, 5, 0, gold=10),
-            Entity("Gnome", EntityClasses.Warrior, 20, 5, 0, gold=10),
-            Mage("Gnome Rune-master", EntityClasses.Warrior, 28, 6, 6, 1, mage_spells=[
+            Entity("Gnome", 20, 5, 0, gold=10),
+            Entity("Gnome", 20, 5, 0, gold=10),
+            Mage("Gnome Rune-master", 28, 6, 6, 1, mage_spells=[
                 Spell("Firebolt", SpellType.Offensive, 2, 8, "The Firebolt Spell of Gnome Rune-master.", cast_firebolt)
             ], gold=30),
         ]
     elif location == "Derelict Shrine":
         return [
-            Entity("Acolyte", EntityClasses.Mage, 18, 5, 0, gold=15),
-            Entity("Acolyte", EntityClasses.Mage, 18, 5, 0, gold=15),
-            Mage("Necromancer", EntityClasses.Mage, 27, 8, 7, 1, mage_spells=[
+            Entity("Acolyte", 18, 5, 0, gold=15),
+            Entity("Acolyte", 18, 5, 0, gold=15),
+            Mage("Necromancer", 27, 8, 7, 1, mage_spells=[
                 Spell("Raise Dead", SpellType.Summoning, 4, 9,
                              "This spell raises one Skeleton from it's earthen grave.", cast_raise_dead)
             ], gold=35)
         ]
     elif location == "Mausoleum":
-        return [BossEnemy("Bone Horror", EntityClasses.BossMonster, 50, 12, 10, 2, [cast_black_miasma], gold=120)]
+        return [BossEnemy("Bone Horror", 50, 12, 10, 2, [cast_black_miasma], gold=120)]
     else:
         return []
 
 
 def enemy_attack(enemy_party, player_party):
+    """
+    This function describes the enemy attack patterns.
+
+    :param enemy_party: Enemy attacking party.
+    :type enemy_party: list[Entity | Mage | BossEnemy]
+    :param player_party: Defending player party.
+    :type player_party: list[Entity | Mage]
+    :return: Nothing.
+    :rtype: None
+    """
     print("\nThe enemy party begins their attack!\n")
 
     for enemy in enemy_party:
@@ -79,6 +97,20 @@ def enemy_attack(enemy_party, player_party):
 
 
 def party_member_use_magic(member, chosen_spell, enemy_party, player_party):
+    """
+    Describes how the player party member can use the magic system.
+
+    :param member: The member to use the magic.
+    :type member: Mage
+    :param chosen_spell: The chosen spell to use.
+    :type chosen_spell: Spell
+    :param enemy_party: Enemy party, the target of the spell.
+    :type enemy_party: list[Entity | Mage | BossEnemy]
+    :param player_party: Needed for friendly combat spells.
+    :type player_party: list[Entity | Mage]
+    :return: Nothing.
+    :rtype: None
+    """
     if chosen_spell.stype == SpellType.Offensive:
         enemy_dict = number_key_dict(enemy_party)
         targets = "\n".join(f"\t{i}) {enemy.name}" for i, enemy in enemy_dict.items())
@@ -113,6 +145,16 @@ def party_member_use_magic(member, chosen_spell, enemy_party, player_party):
 
 
 def party_member_attack(member, enemy_party):
+    """
+    Physical attack by the member of the player party.
+
+    :param member: The attacking member.
+    :type member: Mage | Entity
+    :param enemy_party: The target enemy party.
+    :type enemy_party: list[Entity | Mage | BossEnemy]
+    :return: Nothing.
+    :rtype: None
+    """
     enemy_dict = number_key_dict(enemy_party)
     targets = "\n".join(f"\t{i}) {enemy.name}" for i, enemy in enemy_dict.items())
     print(targets)
@@ -131,6 +173,16 @@ def party_member_attack(member, enemy_party):
 
 
 def battle_at(location, player_party):
+    """
+    The main battle function. the parties meet at location. The battle ends with the defeat of one party.
+
+    :param location: The location of a battle.
+    :type location: str
+    :param player_party: The player party. Enemies are determined depending on location.
+    :type player_party: list[Entity | Mage]
+    :return: The sum of gold the player party earns after combat.
+    :rtype: int
+    """
     enemies = add_enemies(location)
     gold_gained = sum(random.randint(en_gold // 2, en_gold) for enemy in enemies if (en_gold := enemy.gold) > 0)
 
