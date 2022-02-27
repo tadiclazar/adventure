@@ -1,13 +1,17 @@
-from typing import Iterable
+def get_class_as_str(entity_class):
+    if entity_class == entity_class.BaseEntity:
+        return "Base Entity"
+    elif entity_class == entity_class.Warrior:
+        return "Warrior"
+    elif entity_class == entity_class.Rogue:
+        return "Rogue"
+    elif entity_class == entity_class.Mage:
+        return "Mage"
+    elif entity_class == entity_class.BossMonster:
+        return "Boss"
+    else:
+        return "Unidentified"
 
 
 def number_key_dict(iterable):
-    """
-    Make a dictionary where the keys are string numbers starting from 1.
-    The values are whatever was in the passes iterable.
-    :param iterable: The iterable of pretty much anything.
-    :type iterable: Iterable
-    :return: The dictionary of string keys and values.
-    :rtype: dict[str, Any]
-    """
     return {str(n): item for n, item in enumerate(iterable, start=1)}
