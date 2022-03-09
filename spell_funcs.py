@@ -22,11 +22,34 @@ def cast_firebolt(caster, target, spell_power):
     saving_throw = random.random() > ((spell_power / 100) + 0.10)
     if saving_throw:
         spell_damage //= 2
-        print(f"\n{target.name} saves against the Spell!\n")
+        print(f"\n{target.name} saves against the spell!\n")
 
     print(f"{caster.name} casts Firebolt on {target.name}!\n"
         f"{target.name} takes {spell_damage} damage!\n")
     target.hp -= spell_damage
+
+
+def charm_kiss(caster, target, spell_power):
+    if not target:
+        print("\nThere is no target!\n")
+        return None
+
+    saving_throw = random.random() > ((spell_power / 100) + 0.15)
+    effect = spell_power // 2
+    print(f"{caster.name} tries to seduce {target.name}!")
+
+    if saving_throw:
+        print(f"{target.name} saves against the spell and is unaffected!\n")
+    else:
+        if target.armor == 1:
+            target.armor = 0
+            print(f"{target.name} is seduced and has lowered defenses to 0!\n")
+        elif target.armor >= effect:
+            target.armor -= effect
+            print(f"{target.name} is seduced and has lowered defenses by {effect}!\n")
+        elif target.armor == 0:
+            print(f"{target.name} has no armor but a will of a warrior! The charm is resisted!\n")
+            return None
 
 
 def cast_healing(caster, target, spell_power):

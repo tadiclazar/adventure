@@ -4,7 +4,7 @@ from entity import Entity, EntityClasses
 from boss_enemy import BossEnemy
 from spell import Spell, SpellType
 from mage import Mage, SummonedCreature
-from spell_funcs import cast_firebolt, cast_raise_dead, cast_black_miasma
+from spell_funcs import cast_firebolt, cast_raise_dead, cast_black_miasma, charm_kiss
 from helper_funcs import number_key_dict
 
 
@@ -34,6 +34,11 @@ def add_enemies(location):
         ]
     elif location == "Mausoleum":
         return [BossEnemy("Bone Horror", EntityClasses.BossMonster, 50, 12, 10, 2, [cast_black_miasma], gold=120)]
+    elif location == "Underwater Cave":
+        return [
+            Mage("Nymph", EntityClasses.Mage, 20, 8, 7, 0, mage_spells=[Spell("Charm Kiss", SpellType.Offensive, 4, 4, "Spell lowers opponent's armor.", charm_kiss)]),
+            Mage("Nymph", EntityClasses.Mage, 20, 8, 7, 0, mage_spells=[Spell("Charm Kiss", SpellType.Offensive, 4, 4, "Spell lowers opponent's armor.", charm_kiss)])
+        ]
     else:
         return []
 

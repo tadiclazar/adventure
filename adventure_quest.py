@@ -23,13 +23,12 @@ def main():
     player_party = [warrior, rogue, mage]
 
     party_gold = 0
-    firebolt_desc = "This spell burns the target creature and" \
-                    " does fire damage. The damage is " \
-                    "deduced from spell's power."
-    rd_spell_desc = "Raises one Skeleton to fight for the caster's party until the end of combat."
 
-    firebolt_spell = Spell("Firebolt", SpellType.Offensive, 2, 9, firebolt_desc, cast_firebolt)
-    raise_dead_spell = Spell("Raise Dead", SpellType.Summoning, 4, 8, rd_spell_desc, cast_raise_dead)
+    firebolt_spell = Spell("Firebolt", SpellType.Offensive, 2, 9, "This spell burns the target creature and"
+                                                                  " does fire damage. The damage is " \
+                                                                  "deduced from spell's power.", cast_firebolt)
+    raise_dead_spell = Spell("Raise Dead", SpellType.Summoning, 4, 8,
+                             "Raises one Skeleton to fight for the caster's party until the end of combat.", cast_raise_dead)
     healing_spell = Spell("Healing", SpellType.Defensive, 3, 8,
                           "Heals the target for the amount equivalent to spell's power.\n", cast_healing)
 
@@ -67,7 +66,7 @@ def main():
                 print(f"The party finds {healing_spell.name} spell!\n")
                 mage.learn_spell(healing_spell)
 
-            if current_location in battle_locations + ["Mausoleum"]:
+            if current_location in battle_locations + ["Mausoleum", "Underwater Cave"]:
                 battle_prompt = input(f"Do you wish to battle monsters at {current_location}? (y/n)\n")
                 if battle_prompt in ("y", "Y"):
                     party_gold += battle_at(current_location, player_party)
