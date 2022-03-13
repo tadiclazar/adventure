@@ -164,7 +164,7 @@ def battle_at(location, player_party):
                     party_member_attack(member, enemies)
 
             elif command in ("e", "E"):
-                print(f"\nYour party escaped from combat!\n")
+                print(f"\nYour party flees from combat!\n")
                 return 0
 
             elif command in ("i", "I"):

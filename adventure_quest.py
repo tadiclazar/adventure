@@ -14,6 +14,7 @@ def main():
           "Warrior named Aidan,\nRogue by the name of Morena and a Mage called Jasper!\n")
 
     battle_locations = ["Graveyard", "Abandoned Mine", "Derelict Shrine"]
+    towns = ["Town Tristram"]
     current_location = "Town Tristram"
 
     warrior = Entity("Aidan", EntityClasses.Warrior, 35, 9, 3)
@@ -37,22 +38,37 @@ def main():
             print("Game Over!")
             input("Press Enter to quit.")
             break
-        command_prompts = f"Choose command:\n" \
-                          f"\t(Q)uit\n" \
-                          f"\t(T)ravel to:\n" \
-                          f"\t(E)xamine the area\n" \
-                          f"\tParty (I)nfo\n"
+        command_prompts = "Choose command:\n" \
+                          "\t(Q)uit\n" \
+                          "\t(T)ravel to:\n" \
+                          "\t(E)xamine the area\n" \
+                          "\tParty (I)nfo\n"
+
+        if current_location in towns:
+            command_prompts += "\t(R)est at Town Inn\n"
 
         command = input(command_prompts)
 
         if command in ("q", "Q"):
             print("See you later...")
             sys.exit(0)
+
         elif command in ("t", "T"):
-            locations = ["Town Tristram"] + battle_locations
+            locations = towns + battle_locations
             prev_location = current_location
             current_location = travel_to(prev_location, locations)
             print(f"The party travels to {current_location}!\n")
+
+        elif command in ("r", "R"):
+            if current_location in towns:
+                print(f"\nThe party rests at the Inn in {current_location}.\n")
+                for pm in player_party:
+                    pm.heal(300)
+                    if isinstance(pm, Mage):
+                        pm.rejuvenate(100)
+            else:
+                print("\nThe party can only rest while in Town!\n")
+
         elif command in ("e", "E"):
             print(f"\nThe party is currently at {current_location}.\n")
 
@@ -74,10 +90,12 @@ def main():
                     pass
             else:
                 print("You can't battle monsters here!")
+
         elif command in ("i", "i"):
             for pm in player_party:
                 print(pm)
             print(f"\nThe party has {party_gold} gold coins.\n")
+
         else:
             print("Invalid command!\n")
 
