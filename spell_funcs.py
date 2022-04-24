@@ -1,6 +1,5 @@
 import random
-from mage import SummonedCreature
-from entity import EntityClasses
+from entity import Entity, EntityClasses
 
 
 def cast_raise_dead(caster, party, spell_power):
@@ -8,7 +7,7 @@ def cast_raise_dead(caster, party, spell_power):
     skeleton_dmg = spell_power // 2 + 1
     skeleton_armor = spell_power // 3
 
-    skeleton = SummonedCreature("Skeleton", EntityClasses.Summoned, skeleton_hp, 0, skeleton_dmg, skeleton_armor)
+    skeleton = Entity("Skeleton", EntityClasses.Summoned, skeleton_hp, 0, skeleton_dmg, skeleton_armor, is_summoned=True)
     print(f"\n{caster.name} casts Raise Dead! A Skeleton rises from it's earthen grave to fight!\n")
     party.append(skeleton)
 
@@ -60,13 +59,12 @@ def cast_healing(caster, target, spell_power):
     target.heal(spell_power)
 
 
-def cast_black_miasma(target):
-    power = 16
+def cast_black_miasma(caster, target, spell_power):
     saving_throw = 1 if (target.hp > (target.max_hp // 2 + random.randint(1, target.armor))) else 0
 
     if saving_throw:
-        power /= 2
+        spell_power /= 2
         print(f"{target.name} saves against Black Miasma! The damage is halved!\n")
 
-    target.hp -= power
-    print(f"Black Miasma does {power} damage to {target.name}, chocking the life force from the body.\n")
+    target.hp -= spell_power
+    print(f"Black Miasma does {spell_power} damage to {target.name}, chocking the life force from the body.\n")

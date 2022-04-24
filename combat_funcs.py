@@ -1,9 +1,7 @@
 import random
 
 from entity import Entity, EntityClasses
-from boss_enemy import BossEnemy
 from spell import Spell, SpellType
-from mage import Mage, SummonedCreature
 from spell_funcs import cast_firebolt, cast_raise_dead, cast_black_miasma, charm_kiss
 from helper_funcs import number_key_dict
 
@@ -11,33 +9,33 @@ from helper_funcs import number_key_dict
 def add_enemies(location):
     if location == "Graveyard":
         return [
-            Entity("Skeleton", EntityClasses.Warrior, 25, 6, 1, gold=15),
-            Entity("Skeleton", EntityClasses.Warrior, 25, 6, 1, gold=15),
-            Entity("Skeleton Warrior", EntityClasses.Warrior, 30, 8, 2, gold=25),
+            Entity("Skeleton", EntityClasses.Warrior, 25, 0, 6, 1, gold=15),
+            Entity("Skeleton", EntityClasses.Warrior, 25, 0, 6, 1, gold=15),
+            Entity("Skeleton Warrior", EntityClasses.Warrior, 30, 0, 8, 2, gold=25),
         ]
     elif location == "Abandoned Mine":
         return [
-            Entity("Gnome", EntityClasses.Warrior, 20, 5, 0, gold=10),
-            Entity("Gnome", EntityClasses.Warrior, 20, 5, 0, gold=10),
-            Mage("Gnome Rune-master", EntityClasses.Warrior, 28, 6, 6, 1, mage_spells=[
+            Entity("Gnome", EntityClasses.Warrior, 20, 0, 5, 0, gold=10),
+            Entity("Gnome", EntityClasses.Warrior, 20, 0, 5, 0, gold=10),
+            Entity("Gnome Rune-master", EntityClasses.Mage, 28, 6, 6, 1, mage_spells=[
                 Spell("Firebolt", SpellType.Offensive, 2, 8, "The Firebolt Spell of Gnome Rune-master.", cast_firebolt)
             ], gold=30),
         ]
     elif location == "Derelict Shrine":
         return [
-            Entity("Acolyte", EntityClasses.Mage, 18, 5, 0, gold=15),
-            Entity("Acolyte", EntityClasses.Mage, 18, 5, 0, gold=15),
-            Mage("Necromancer", EntityClasses.Mage, 27, 8, 7, 1, mage_spells=[
+            Entity("Acolyte",EntityClasses.Mage, 18, 0, 5, 0, gold=15),
+            Entity("Acolyte", EntityClasses.Mage, 18, 0, 5, 0, gold=15),
+            Entity("Necromancer", EntityClasses.Mage, 27, 8, 7, 1, mage_spells=[
                 Spell("Raise Dead", SpellType.Summoning, 4, 9,
                              "This spell raises one Skeleton from it's earthen grave.", cast_raise_dead)
             ], gold=35)
         ]
     elif location == "Mausoleum":
-        return [BossEnemy("Bone Horror", EntityClasses.BossMonster, 50, 12, 10, 2, [cast_black_miasma], gold=120)]
+        return [Entity("Bone Horror", EntityClasses.BossMonster, 50, 12, 10, 2, [Spell("Black Miasma", SpellType.Offensive, 4, 16, "Cast black mist at an enemy, seeping death into it's veins.", cast_black_miasma)], gold=120)]
     elif location == "Underwater Cave":
         return [
-            Mage("Nymph", EntityClasses.Mage, 20, 8, 7, 0, mage_spells=[Spell("Charm Kiss", SpellType.Offensive, 4, 4, "Spell lowers opponent's armor.", charm_kiss)]),
-            Mage("Nymph", EntityClasses.Mage, 20, 8, 7, 0, mage_spells=[Spell("Charm Kiss", SpellType.Offensive, 4, 4, "Spell lowers opponent's armor.", charm_kiss)])
+            Entity("Nymph", EntityClasses.Mage, 20, 8, 7, 0, mage_spells=[Spell("Charm Kiss", SpellType.Offensive, 4, 4, "Spell lowers opponent's armor.", charm_kiss)]),
+            Entity("Nymph", EntityClasses.Mage, 20, 8, 7, 0, mage_spells=[Spell("Charm Kiss", SpellType.Offensive, 4, 4, "Spell lowers opponent's armor.", charm_kiss)])
         ]
     else:
         return []
@@ -50,7 +48,7 @@ def enemy_attack(enemy_party, player_party):
         print(f"{enemy.name} is moving!\n")
         target = random.choice(player_party)
 
-        if isinstance(enemy, Mage):
+        if enemy.mage_spells:
             available_spells = number_key_dict(enemy.mage_spells)
             chosen_spell = random.choice(tuple(available_spells))
 
@@ -63,18 +61,12 @@ def enemy_attack(enemy_party, player_party):
                 if chosen_spell.stype == SpellType.Offensive:
                     enemy.cast_spell(chosen_spell, target)
                     if target.is_dead():
-                        print(f"Player party has lost {target.name}!\n")
+                        print(f"The player party lost {target.name}!\n")
                         player_party.remove(target)
 
                 elif chosen_spell.stype == SpellType.Summoning:
                     enemy.cast_spell(chosen_spell, enemy_party)
 
-        elif isinstance(enemy, BossEnemy):
-            chosen_action = random.randint(1, 2)
-            if chosen_action == 1 and enemy.mp >= 4:
-                enemy.use_special(target)
-            else:
-                enemy.attack(target)
         else:
             enemy.attack(target)
 
@@ -94,7 +86,7 @@ def party_member_use_magic(member, chosen_spell, enemy_party, player_party):
             target = enemy_dict[target_enemy]
             member.cast_spell(chosen_spell, target)
             if target.is_dead():
-                print(f"Enemy party has lost {target.name}!\n")
+                print(f"The enemy party has lost {target.name}!\n")
                 enemy_party.remove(target)
         else:
             print("Invalid target!\n")
@@ -129,7 +121,7 @@ def party_member_attack(member, enemy_party):
         member.attack(target)
 
         if target.is_dead():
-            print(f"Enemy party has lost {target.name}!\n")
+            print(f"The enemy party has lost {target.name}!\n")
             enemy_party.remove(target)
     else:
         print("Invalid target!")
@@ -153,7 +145,7 @@ def battle_at(location, player_party):
                               "\t(E)scape combat\n" \
                               "\tBattle (I)nfo\n" \
 
-            if isinstance(member, Mage):
+            if member.mage_spells:
                 commands_prompt += "\t(C)ast a spell\n"
 
             print(f"Enter your command for {member.name}: \n")
@@ -183,13 +175,14 @@ def battle_at(location, player_party):
                     spells_str += f"\nMana available: {member.mp}\n"
                     print(spells_str)
 
-                    chosen_spell = input("Choose spell to cast: ")
+                    chosen_spell = input("Choose a spell to cast: ")
                     chosen_spell = available_spells[chosen_spell]
 
-                    party_member_use_magic(member, chosen_spell, enemies, player_party)
+                    if chosen_spell:
+                        party_member_use_magic(member, chosen_spell, enemies, player_party)
 
             if not enemies:
-                party_summoned = (crit for crit in player_party if isinstance(crit, SummonedCreature))
+                party_summoned = (crit for crit in player_party if crit.is_suEntitymmoned)
                 for crit in party_summoned:
                     crit.unsummon(player_party)
                 print(f"\nYou have won the battle!\nGold earned: {gold_gained}.")

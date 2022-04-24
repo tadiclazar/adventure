@@ -1,7 +1,6 @@
 import sys
 
 from entity import Entity, EntityClasses
-from mage import Mage
 from spell import Spell, SpellType
 from combat_funcs import battle_at
 from world_funcs import travel_to
@@ -11,15 +10,15 @@ from spell_funcs import cast_firebolt, cast_raise_dead, cast_healing
 def main():
     print("Welcome to the Adventure Game!\nExplore the world and discover it's secrets!\n")
     print("You are controlling a small party of adventurers: "
-          "Warrior named Aidan,\nRogue by the name of Morena and a Mage called Jasper!\n")
+          "Entity named Aidan,\nRogue by the name of Morena and a Mage called Jasper!\n")
 
     battle_locations = ["Graveyard", "Abandoned Mine", "Derelict Shrine"]
     towns = ["Town Tristram"]
     current_location = "Town Tristram"
 
-    warrior = Entity("Aidan", EntityClasses.Warrior, 35, 9, 3)
-    rogue = Entity("Morena", EntityClasses.Rogue, 30, 8, 1)
-    mage = Mage("Jasper", EntityClasses.Mage, 20, 10, 5, 0, mage_spells=[], gold=0)
+    warrior = Entity("Aidan", EntityClasses.Warrior, 35, 0, 9, 3)
+    rogue = Entity("Morena", EntityClasses.Rogue, 30, 0, 8, 1)
+    mage = Entity("Jasper", EntityClasses.Mage, 20, 10, 5, 0, mage_spells=[], gold=0)
 
     player_party = [warrior, rogue, mage]
 
@@ -38,6 +37,7 @@ def main():
             print("Game Over!")
             input("Press Enter to quit.")
             break
+
         command_prompts = "Choose command:\n" \
                           "\t(Q)uit\n" \
                           "\t(T)ravel to:\n" \
@@ -64,8 +64,7 @@ def main():
                 print(f"\nThe party rests at the Inn in {current_location}.\n")
                 for pm in player_party:
                     pm.heal(300)
-                    if isinstance(pm, Mage):
-                        pm.rejuvenate(100)
+                    pm.rejuvenate(100)
             else:
                 print("\nThe party can only rest while in Town!\n")
 
