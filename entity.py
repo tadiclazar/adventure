@@ -38,7 +38,7 @@ class Entity:
                f"Current HP: {self.hp}\tMax. HP: {self.max_hp}\tDamage: {self.damage}\n" \
                f"Armor Class: {self.armor}\n" \
                f"Current Mana: {self.mp}\tMax. Mana: {self.max_mp}\n" \
-               f"Known Spells:\n{known_spells}"
+               f"Known Spells:\n{known_spells}\n"
 
     def is_dead(self):
         if self.hp <= 0:

@@ -31,7 +31,7 @@ def add_enemies(location):
             ], gold=35)
         ]
     elif location == "Mausoleum":
-        return [Entity("Bone Horror", EntityClasses.BossMonster, 50, 12, 10, 2, [Spell("Black Miasma", SpellType.Offensive, 4, 16, "Cast black mist at an enemy, seeping death into it's veins.", cast_black_miasma)], gold=120)]
+        return [Entity("Bone Horror", EntityClasses.BossMonster, 50, 12, 10, 2, [Spell("Black Miasma", SpellType.Global, 4, 16, "Cast black mist at an enemy, seeping death into it's veins.", cast_black_miasma)], gold=120)]
     elif location == "Underwater Cave":
         return [
             Entity("Nymph", EntityClasses.Mage, 20, 8, 7, 0, mage_spells=[Spell("Charm Kiss", SpellType.Offensive, 4, 4, "Spell lowers opponent's armor.", charm_kiss)]),
@@ -63,6 +63,14 @@ def enemy_attack(enemy_party, player_party):
                     if target.is_dead():
                         print(f"The player party lost {target.name}!\n")
                         player_party.remove(target)
+
+                elif chosen_spell.stype == SpellType.Global:
+                    print(f"{enemy.name} uses a Global Spell!\n")
+                    enemy.cast_spell(chosen_spell, player_party)
+                    for member in player_party:
+                        if member.is_dead():
+                            print(f"The player party lost {member.name}!\n")
+                            player_party.remove(member)
 
                 elif chosen_spell.stype == SpellType.Summoning:
                     enemy.cast_spell(chosen_spell, enemy_party)

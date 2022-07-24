@@ -59,12 +59,16 @@ def cast_healing(caster, target, spell_power):
     target.heal(spell_power)
 
 
+# TODO: GLOBAL SPELL, FIND A WAY TO SEPARATE THESE
 def cast_black_miasma(caster, target, spell_power):
-    saving_throw = 1 if (target.hp > (target.max_hp // 2 + random.randint(1, target.armor))) else 0
+    dmg = 0
+    for pm in target:
+        saving_throw = 1 if (pm.hp > (pm.max_hp // 2 + random.randint(0, pm.armor))) else 0
+        if saving_throw:
+            dmg = int(spell_power / 2)
+            print(f"{pm.name} saves against Black Miasma! The damage is halved!\n")
+        else:
+            dmg = int(spell_power)
 
-    if saving_throw:
-        spell_power /= 2
-        print(f"{target.name} saves against Black Miasma! The damage is halved!\n")
-
-    target.hp -= spell_power
-    print(f"Black Miasma does {spell_power} damage to {target.name}, chocking the life force from the body.\n")
+        pm.hp -= int(dmg)
+        print(f"Black Miasma does {dmg} damage to {pm.name}, chocking the life force from the body.\n")
