@@ -182,7 +182,7 @@ def battle_at(location, player_party):
                         party_member_use_magic(member, chosen_spell, enemies, player_party)
 
             if not enemies:
-                party_summoned = (crit for crit in player_party if crit.is_suEntitymmoned)
+                party_summoned = (crit for crit in player_party if crit.is_summoned)
                 for crit in party_summoned:
                     crit.unsummon(player_party)
                 print(f"\nYou have won the battle!\nGold earned: {gold_gained}.")
