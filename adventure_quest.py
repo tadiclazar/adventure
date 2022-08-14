@@ -5,16 +5,19 @@ from spell import Spell, SpellType
 from combat_funcs import battle_at
 from world_funcs import travel_to
 from spell_funcs import cast_firebolt, cast_raise_dead, cast_healing
+from shop import Item, shop_for_items
 
 
 def main():
     print("Welcome to the Adventure Game!\nExplore the world and discover it's secrets!\n")
     print("You are controlling a small party of adventurers: "
-          "Entity named Aidan,\nRogue by the name of Morena and a Mage called Jasper!\n")
+          "Warrior named Aidan,\nRogue by the name of Morena and a Mage called Jasper!\n")
 
     battle_locations = ["Graveyard", "Abandoned Mine", "Derelict Shrine"]
+    boss_locations = ["Mausoleum", "Underwater Cave"]
     towns = ["Town Tristram"]
     current_location = "Town Tristram"
+    party_inventory = []
 
     warrior = Entity("Aidan", EntityClasses.Warrior, 35, 0, 9, 3)
     rogue = Entity("Morena", EntityClasses.Rogue, 30, 0, 8, 1)
@@ -45,7 +48,7 @@ def main():
                           "\tParty (I)nfo\n"
 
         if current_location in towns:
-            command_prompts += "\t(R)est at Town Inn\n"
+            command_prompts += "\t(R)est at Town Inn\n\t(S)hop for items\n"
 
         command = input(command_prompts)
 
@@ -81,7 +84,7 @@ def main():
                 print(f"The party finds {healing_spell.name} spell!\n")
                 mage.learn_spell(healing_spell)
 
-            if current_location in battle_locations + ["Mausoleum", "Underwater Cave"]:
+            if current_location in battle_locations + boss_locations:
                 battle_prompt = input(f"Do you wish to battle monsters at {current_location}? (y/n)\n")
                 if battle_prompt in ("y", "Y"):
                     party_gold += battle_at(current_location, player_party)
@@ -94,7 +97,16 @@ def main():
             for pm in player_party:
                 print(pm)
             print(f"\nThe party has {party_gold} gold coins.\n")
-
+            print(party_inventory)
+        
+        elif command in ("s", "S"):
+            print("The party stops at the local store to shop for items.\n")
+            shop_for_items(inventory=party_inventory,
+                           shop_items=[Item("Necklace of Power", 15, "Necklace with certain properties"),
+                           Item("Magic Sword", 25, "A sword imbued with the magical energies.")],
+                           cur_loc=current_location,
+                           party_gold=party_gold
+                           )
         else:
             print("Invalid command!\n")
 
